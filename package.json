@@ -1,0 +1,8 @@
+{
+  "name": "Python",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/longwMJ/Python.git",
+  "author": "longwMJ <53077305+longwMJ@users.noreply.github.com>",
+  "license": "MIT"
+}
