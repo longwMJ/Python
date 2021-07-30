@@ -1,3 +1,33 @@
+mac:
+安装: 
+
+https://blog.csdn.net/yxys01/article/details/103204531
+
+
+终端输入 python, 回车查看是否有安装
+
+有安装, 2.7, 提示版本旧了, 所以安装新的
+
+brew search python3
+
+
+// 有一系列提示: 
+// boost-python3       python@3.7          python@3.8          python@3.9 ✔
+
+
+// 然后执行  brew install python@3.9
+
+
+在终端输入 python3 查看是否安装成功
+
+
+最开始的代码: 
+print("hello world")
+
+
+
+
+
 https://www.bilibili.com/video/BV1i54y1h75W?from=search&seid=17439991845901648958
 
 
