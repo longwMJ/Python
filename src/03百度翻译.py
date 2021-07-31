@@ -7,7 +7,7 @@ url = 'https://fanyi.baidu.com/sug'
 
 q = input("请输入你要翻译的英文单词:")
 
-
+# 设置post请求参数
 # 字典 我认为是参数的意思
 resData =  {
     "kw": f'{q}'
