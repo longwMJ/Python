@@ -33,6 +33,6 @@ https://www.bilibili.com/video/BV1i54y1h75W?from=search&seid=1743999184590164895
 
 vscode 安装插件 (Python), 之后有安装提示, 跟着安装就行
 
-运行py文件: 直接在当前页面: shift + 回车
+运行py文件: 直接在当前页面: shift + 回车, 或者点击右上角有三角形
 
 
