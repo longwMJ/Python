@@ -47,3 +47,6 @@ res = requests.get(url=url, params=reqData, headers=newheaders)
 
 print(res.request.path_url)
 print(res.text)
+
+# 记得关掉爬虫!!!! 避免请求次数过多的问题
+res.close()
