@@ -36,3 +36,13 @@ vscode 安装插件 (Python), 之后有安装提示, 跟着安装就行
 运行py文件: 直接在当前页面: shift + 回车, 或者点击右上角有三角形
 
 
+
+安装插件
+
+pip install requests
+
+err:  zsh: command not found: pip
+
+如果不行, 使用pip3, 因为我安装的是Python3, 本地原来的pip可能没有
+
+pip3 install requests
