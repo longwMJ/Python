@@ -12,7 +12,7 @@ resp = urlopen(url)
 # name = 'xue'
 
 # print(name)
-print(resp.read().decode("utf-8"))
+# print(resp.read().decode("utf-8"))
 
 
 # 保存网页
