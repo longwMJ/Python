@@ -46,3 +46,5 @@ err:  zsh: command not found: pip
 如果不行, 使用pip3, 因为我安装的是Python3, 本地原来的pip可能没有
 
 pip3 install requests
+
+pip3 install bs4
