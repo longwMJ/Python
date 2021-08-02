@@ -51,8 +51,13 @@ pip3 install bs4
 
 pip3 install lxml
 
+
+mac用不了
 pip3 install pywifi
 pip3 install comtypes
 
-
+将文本转css可以查询的对象
 pip3 install parsel
+
+进度条
+pip3 install tqdm
