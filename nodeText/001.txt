@@ -61,3 +61,6 @@ pip3 install parsel
 
 进度条
 pip3 install tqdm
+
+数组对象显示
+pip3 install pandas
