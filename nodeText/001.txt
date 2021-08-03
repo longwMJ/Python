@@ -64,3 +64,14 @@ pip3 install tqdm
 
 数组对象显示
 pip3 install pandas
+
+阅读文本
+pip3 install pyttsx3
+
+
+
+数据库管理 SQLite:
+
+
+数据库图形软件下载:
+https://sqlitebrowser.org/
