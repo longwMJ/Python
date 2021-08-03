@@ -2,7 +2,9 @@ import requests
 import parsel
 from tqdm import tqdm
 import time
+from multiprocessing import Pool
 import pandas as pd
+from functools import partial
 
 a_url = 'https://www.biquges.com'
 
@@ -23,21 +25,22 @@ def save(name, title, content):
         f.write('\n')
         f.close()
 
+
 def getChildResText(html_url):
     res = requests.get(url=html_url, headers=headers)
     text = res.text
     res.close()
     return text
 
+
 def saveText(url, title):
-    childText = getChildResText(url)
+    herf_url = a_url + url
+    childText = getChildResText(herf_url)
     childSelector = parsel.Selector(childText)
     childName = childSelector.css('.bookname h1::text').get()
     childContentList = childSelector.css('#content::text').getall()
     # 转字符串 强转  用''.join()
     childContentJoin = ''.join(childContentList)
-    print('novel_title', title)
-    print('childName', childName)
     if childName is None:
         saveText(url=url, title=title)
     else:
@@ -47,11 +50,17 @@ def getRes(html_url):
     res = requests.get(url=html_url, headers=headers)
     selector = parsel.Selector(res.text)
     novel_title = selector.css('#info h1::text').get()
+    # 所有章节
     href = selector.css('#list dd a::attr(href)').getall()
-    hrefs = href[ 9 - len(href):]
-    for i in tqdm(hrefs):
-        link_url = a_url + i
-        saveText(url=link_url, title=novel_title)
+    hrefs = href[9 - len(href):]
+    # for i in tqdm(hrefs):
+    #     # link_url = a_url + i
+    #     saveText(url=i, title=novel_title)
+
+    # 固定传入title参数
+    saveText_work = partial(saveText, title = novel_title)
+    with Pool(2) as p:
+      list(tqdm(p.imap(saveText_work, hrefs), total=len(hrefs)))
 
     res.close()
     print('over')
@@ -61,7 +70,6 @@ if __name__ == '__main__':
     while True:
         word = input('请输入要下载的小说名或者作者名:')
         data = {
-            # 'searchkey': '登天',
             'searchkey': word,
             'searchtype': 'articlename'
         }
@@ -98,7 +106,7 @@ if __name__ == '__main__':
             cuId = searchlist[int(num)]['id']
             novel_url = f'{a_url}/{cuId}'
             getRes(html_url=novel_url)
-            again =input('是否继续下载小说(y/n):')
+            again = input('是否继续下载小说(y/n):')
             if again == 'y':
                 continue
             else:
