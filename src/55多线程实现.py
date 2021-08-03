@@ -1,8 +1,10 @@
 import requests
+from concurrent.futures import ThreadPoolExecutor
 from time import perf_counter
 
-from requests.models import Response
 
+# 开设线程 (多少条)
+n_threads = 5
 
 # 缓冲区大小
 buffer_size = 1024
@@ -15,6 +17,8 @@ def download_img(url):
     with open(filename, 'wb') as f:
         for i in res.iter_content(buffer_size):
             f.write(i)
+            f.close()
+    res.close()
 
 if __name__ == '__main__':
     urls = [
@@ -30,8 +34,17 @@ if __name__ == '__main__':
     ] * 5
 
     t = perf_counter()
-    for url in urls:
-        download_img(url)
 
-    # 4.48s
+    # 单线程 4.48s
+    # for url in urls:
+    #     download_img(url)
+    # 
+
+
+
+    # 多线程 1.59s
+    with ThreadPoolExecutor(max_workers=n_threads) as pool:
+        pool.map(download_img, urls)
+        
+
     print(f'花费时间:{perf_counter() - t:.2f}s')         
