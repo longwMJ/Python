@@ -9,16 +9,26 @@ n_threads = 5
 # 缓冲区大小
 buffer_size = 1024
 
+# # 下载处理函数
+# def download_img(url):
+#     res = requests.get(url, stream=True)
+#     # 文件名
+#     filename = url.split('/')[-1]
+#     with open(filename, 'wb') as f:
+#         for i in res.iter_content(buffer_size):
+#             f.write(i)
+#             f.close()
+#     res.close()
 # 下载处理函数
 def download_img(url):
-    res = requests.get(url, stream=True)
+    # res = requests.get(url, stream=True)
+    res = requests.get(url)
     # 文件名
     filename = url.split('/')[-1]
     with open(filename, 'wb') as f:
-        for i in res.iter_content(buffer_size):
-            f.write(i)
-            f.close()
-    res.close()
+        f.write(res.content)
+        f.close()
+        res.close()
 
 if __name__ == '__main__':
     urls = [
@@ -31,7 +41,7 @@ if __name__ == '__main__':
         'https://wx1.sinaimg.cn/mw690/a7295e45gy1gt36f40oycj20nm0eyq61.jpg',
         'https://wx3.sinaimg.cn/mw690/a7295e45gy1gt36eqg2mqj20zk1hckhf.jpg',
         'https://wx3.sinaimg.cn/mw690/a7295e45gy1gt36f4lg3aj20nm0fotcw.jpg',
-    ] * 5
+    ]
 
     t = perf_counter()
 
