@@ -1,7 +1,6 @@
 import requests
 import parsel
 from tqdm import tqdm
-import time
 from multiprocessing import Pool
 import pandas as pd
 from functools import partial
@@ -17,35 +16,13 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36'
 }
 
-# def save(name, title, content):
-#     # with open(name + '.txt', mode='a', encoding='utf-8') as f:
-#     with open(title + '.txt', mode='a', encoding='utf-8') as f:
-#         f.write(title)
-#         f.write('\n')
-#         f.write(content)
-#         f.write('\n')
-#         f.close()
-def save(name, title, content):
-    # with open(name + '.txt', mode='a', encoding='utf-8') as f:
-    # with open(title + '.txt', mode='a', encoding='utf-8') as f:
-    #     f.write(title)
-    #     f.write('\n')
-    #     f.write(content)
-    #     f.write('\n')
-    #     f.close()
+def save(title, content):
     conn = sqlite3.connect('novel.db')
     cursor = conn.cursor()
 
-    sql = "UPDATE NovelDB SET  Content = ? WHERE Title = ?"
+    sql = "UPDATE NovelDBPABC SET  Content = ? WHERE Title = ?"
 
-    print('title:', title, '999')
-    print('title:', title.lstrip(), '999')
-    print('title:', '四十二、入绝境风沙罗布泊 颂心经指路迷途人', '999')
-
-
-    # cursor.execute(sql, (content,  title.strip()))
     cursor.execute(sql, (content,  title))
-
 
    # 提交事物
     conn.commit()
@@ -56,15 +33,13 @@ def save(name, title, content):
     #关闭连接
     conn.close()
 
-
 def getChildResText(html_url):
     res = requests.get(url=html_url, headers=headers)
     text = res.text
     res.close()
     return text
 
-
-def saveText(url, title):
+def saveText(url):
     herf_url = a_url + url
     childText = getChildResText(herf_url)
     childSelector = parsel.Selector(childText)
@@ -73,10 +48,9 @@ def saveText(url, title):
     # 转字符串 强转  用''.join()
     childContentJoin = ''.join(childContentList)
     if childTitle is None:
-        saveText(url=url, title=title)
+        saveText(url=url)
     else:
-        print('sss  title:', title)
-        save(name=title, title=childTitle.strip(), content=childContentJoin)
+        save(title=childTitle.strip(), content=childContentJoin)
 
 def getRes(html_url):
     res = requests.get(url=html_url, headers=headers)
@@ -84,31 +58,23 @@ def getRes(html_url):
     novel_Name = selector.css('#info h1::text').get()
     # 所有章节
     href = selector.css('#list dd a::attr(href)').getall()
-    # hrefs = href[9 - len(href):]
-    hrefs = href[49 - len(href):]
+    hrefs = href[9 - len(href):]
     # 所有章节
     aTitle = selector.css('#list dd a::text').getall()
-    # aTitles = aTitle[9 - len(aTitle):]
-    aTitles = aTitle[49 - len(aTitle):]
-
-    # print(aTitles)
+    aTitles = aTitle[9 - len(aTitle):]
 
     conn = sqlite3.connect('novel.db')
 
     # 创建游标
     cursor = conn.cursor()
 
-    sql = 'CREATE TABLE NovelDB(id integer PRIMARY KEY autoincrement, Name  TEXT, title TEXT, content TEXT)'
+    sql = 'CREATE TABLE NovelDBPABC(id integer PRIMARY KEY autoincrement, Name  TEXT, title TEXT, content TEXT)'
     cursor.execute(sql)
 
-    sql = "INSERT INTO NovelDB(Name, Title) VALUES(?, ?)"
+    sql = "INSERT INTO NovelDBPABC(Name, Title) VALUES(?, ?)"
 
     # 创建游标
     cursor = conn.cursor()
-    # for i in tqdm(hrefs):
-    #     # link_url = a_url + i
-    #     # saveText(url=i, title=novel_Name)
-    #     cursor.execute(sql, ())
 
     for t in aTitles:
         cursor.execute(sql, (novel_Name, t.strip()))
@@ -122,11 +88,9 @@ def getRes(html_url):
     #关闭连接
     conn.close()
 
-
-    
-
-    # 固定传入title参数
-    saveText_work = partial(saveText, title = novel_Name)
+    # 固定传入title参数 
+    # saveText_work = partial(saveText, title = novel_Name)
+    saveText_work = partial(saveText)
     with Pool(2) as p:
       list(tqdm(p.imap(saveText_work, hrefs), total=len(hrefs)))
 
@@ -135,14 +99,21 @@ def getRes(html_url):
     # 创建游标
     cursor = conn.cursor()
 
-    sql = "select * from NovelDB"
+    sql = "select * from NovelDBPABC"
+
+    content_text = ''
     values = cursor.execute(sql)
     for i in values:
-        print(i)
-        # (2411, '蛊真人', '第三百六十八节：方源、巨阳战星宿', None)
+        # print(i)
+        cc = ''.join(i[3])
+        content_text = f'{content_text}{i[2]}\n\n\n{cc}\n\n\n'
+       
+    with open(novel_Name + '.txt', mode='a', encoding='utf-8') as f:
+        f.write(content_text)
+        f.close()
 
     #删除表格Student
-    cursor.execute("DROP TABLE NovelDB")
+    cursor.execute("DROP TABLE NovelDBPABC")
 
     # 提交事物
     conn.commit()
