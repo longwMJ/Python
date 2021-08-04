@@ -20,7 +20,7 @@ def save(title, content):
     conn = sqlite3.connect('novel.db')
     cursor = conn.cursor()
 
-    sql = "UPDATE NovelDBPABC SET  Content = ? WHERE Title = ?"
+    sql = "UPDATE NovelDBPABCD SET  Content = ? WHERE Title = ?"
 
     cursor.execute(sql, (content,  title))
 
@@ -68,10 +68,10 @@ def getRes(html_url):
     # 创建游标
     cursor = conn.cursor()
 
-    sql = 'CREATE TABLE NovelDBPABC(id integer PRIMARY KEY autoincrement, Name  TEXT, title TEXT, content TEXT)'
+    sql = 'CREATE TABLE NovelDBPABCD(id integer PRIMARY KEY autoincrement, Name  TEXT, title TEXT, content TEXT)'
     cursor.execute(sql)
 
-    sql = "INSERT INTO NovelDBPABC(Name, Title) VALUES(?, ?)"
+    sql = "INSERT INTO NovelDBPABCD(Name, Title) VALUES(?, ?)"
 
     # 创建游标
     cursor = conn.cursor()
@@ -99,21 +99,22 @@ def getRes(html_url):
     # 创建游标
     cursor = conn.cursor()
 
-    sql = "select * from NovelDBPABC"
+    sql = "select * from NovelDBPABCD"
 
     content_text = ''
     values = cursor.execute(sql)
-    for i in values:
-        # print(i)
-        cc = ''.join(i[3])
-        content_text = f'{content_text}{i[2]}\n\n\n{cc}\n\n\n'
+    # for i, obj in values:
+    for i, obj in enumerate(values):
+        # print(obj)
+        cc = ''.join(obj[3])
+        content_text = f'{content_text}第{i + 1}章 {obj[2]}\n\n\n{cc}\n\n\n'
        
     with open(novel_Name + '.txt', mode='a', encoding='utf-8') as f:
         f.write(content_text)
         f.close()
 
     #删除表格Student
-    cursor.execute("DROP TABLE NovelDBPABC")
+    cursor.execute("DROP TABLE NovelDBPABCD")
 
     # 提交事物
     conn.commit()
