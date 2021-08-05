@@ -68,6 +68,9 @@ pip3 install pandas
 阅读文本
 pip3 install pyttsx3
 
+异步的requests
+pip3 install aiohttp
+
 
 
 数据库管理 SQLite:
@@ -75,3 +78,23 @@ pip3 install pyttsx3
 
 数据库图形软件下载:
 https://sqlitebrowser.org/
+
+selenium 打开浏览器, 像人一样去操作浏览器:
+
+
+1:
+pip3 install selenium -i 清华源
+或者
+pip3 install selenium
+
+2:
+安装浏览器驱动  根据浏览器当前版本下载对应(如果没有找到, 就下载前一个版本的驱动)
+ https://npm.taobao.org/mirrors/chromedriver
+
+ 下载压缩包后解压, 然后放在python解析器所在的文件夹
+
+ python解析器所在: 运行一个python程序, 终端里面有提到(/usr/local/bin/python)
+
+前往文件夹放入即可
+
+
