@@ -16,18 +16,25 @@ web = Chrome(options=opt)
 
 web.get('https://www.endata.com.cn/BoxOffice/BO/Year/index.html')
 
-# 定位里面到下拉列表
-sel_el = web.find_element_by_xpath('//*[@id="OptionDate"]')
+time.sleep(2)
 
-# 包装下拉列表
-sel = Select(sel_el)
+# # 定位里面到下拉列表
+# sel_el = web.find_element_by_xpath('//*[@id="OptionDate"]')
 
-# 让浏览器选择对应年份(选项)
+# # 包装下拉列表
+# sel = Select(sel_el)
 
-for i in range(len(sel.options)):
-    # 打开对应的电影年份
-    sel.select_by_index(i)
-    time.sleep(2)
-    table = web.find_element_by_xpath('//*[@id="TableList"]/table')
-    print(table.text)
-    print('===========================')
+# # 让浏览器选择对应年份(选项)
+
+# for i in range(len(sel.options)):
+#     # 打开对应的电影年份
+#     sel.select_by_index(i)
+#     time.sleep(2)
+#     table = web.find_element_by_xpath('//*[@id="TableList"]/table')
+#     # print(table.text)
+#     # print('===========================')
+
+# web.close()
+
+# 拿到页面加载后的html代码(执行js或者ajax后拿的html)
+print(web.page_source)
